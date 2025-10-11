@@ -15,6 +15,40 @@ $popup_message = "";
 $is_ajax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+  // ======= UPDATE USER =======
+  if (isset($_POST['action']) && $_POST['action'] == 'update') {
+    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $fullname = trim($_POST['fullname'] ?? '');
+    $form_username = trim($_POST['username'] ?? '');
+    $dob = $_POST['dob'] ?? '';
+    $email = trim($_POST['email'] ?? '');
+
+    if ($id && $fullname && $form_username && $dob && $email) {
+      $stmt = $conn->prepare("UPDATE tbl_regi_form SET `Full Name`=?, `User name`=?, `Date of Birth`=?, Email=? WHERE id=?");
+      $stmt->bind_param("ssssi", $fullname, $form_username, $dob, $email, $id);
+      if ($stmt->execute()) {
+        $msg = "User updated successfully!";
+        $success = true;
+      } else {
+        $msg = "Error updating user: " . htmlspecialchars($conn->error);
+        $success = false;
+      }
+      $stmt->close();
+    } else {
+      $msg = "All fields are required.";
+      $success = false;
+    }
+
+    if ($is_ajax) {
+      header('Content-Type: application/json');
+      echo json_encode(['success' => $success, 'message' => $msg]);
+      $conn->close();
+      exit();
+    }
+  }
+
+  // ======= DELETE USER =======
   if (isset($_POST['action']) && $_POST['action'] == 'delete') {
     $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($id === false) {
@@ -44,6 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 
+  // ======= REGISTER NEW USER =======
   $fullname = trim($_POST['fullname'] ?? '');
   $form_username = trim($_POST['username'] ?? ''); 
   $dob = $_POST['dob'] ?? '';
@@ -128,16 +163,16 @@ $conn->close();
   <title>Registration Form</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body style="background: linear-gradient(to bottom right, #202127, #414141); min-height: 200vh;" class="flex items-start justify-center p-5">
+<body style="background: linear-gradient(to bottom right, #202127, #030027ff); min-height: 200vh;" class="flex items-start justify-center p-5">
   <div class="bg-white bg-opacity-10 p-8 rounded-2xl shadow-lg w-full max-w-5xl text-center backdrop-blur-[5px]">
     <h1 class="text-white text-3xl mb-5 shadow-[2px_2px_4px_rgba(0,0,0,0.404)]">User Management</h1>
 
     <div class="flex justify-around mb-5">
       <button id="btn-list" onclick="showTab('list')" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">List Users</button>
-      <button id="btn-register" onclick="showTab('register')" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">Register New User</button>
+      <button id="btn-register" onclick="showTab('register')" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">Register / Edit User</button>
     </div>
 
-    <!-- LIST -->
+    <!-- LIST TAB -->
     <div id="list-tab" class="block">
       <?php echo $message; ?>
       <div class="overflow-x-auto">
@@ -161,8 +196,11 @@ $conn->close();
               <td class="p-4 text-indigo-100 border-b border-indigo-300 text-center"><?php echo htmlspecialchars($user['Date of Birth']); ?></td>
               <td class="p-4 text-indigo-100 border-b border-indigo-300 text-center"><?php echo htmlspecialchars($user['Email']); ?></td>
               <td class="p-4 border-b border-indigo-300">
-                <div class="flex justify-center">
-                  <button class="bg-gray-500 text-white px-3 py-2 rounded hover:bg-gray-600 transition" onclick="deleteUser(<?php echo htmlspecialchars($user['id']); ?>)">Delete</button>
+                <div class="flex justify-center space-x-2">
+                  <button class="bg-gray-600 text-white px-3 py-2 rounded hover:bg-gray-700 transition"
+                    onclick='editUser(<?php echo json_encode($user); ?>)'>Edit</button>
+                  <button class="bg-gray-500 text-white px-3 py-2 rounded hover:bg-gray-600 transition"
+                    onclick="deleteUser(<?php echo htmlspecialchars($user['id']); ?>)">Delete</button>
                 </div>
               </td>
             </tr>
@@ -172,49 +210,48 @@ $conn->close();
       </div>
     </div>
 
-    <!-- REGISTER -->
+    <!-- REGISTER TAB -->
     <div id="register-tab" class="hidden">
       <?php echo $message; ?>
       <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" id="register-form" class="space-y-4">
+        <input type="hidden" name="id" id="user_id" value="">
+        <input type="hidden" name="action" id="form_action" value="register">
+
         <div>
           <p class="text-indigo-100 font-medium mb-2">Full Name:</p>
-          <input type="text" name="fullname" placeholder="Full Name" value="<?php echo htmlspecialchars($_POST['fullname'] ?? ''); ?>" required class="w-full p-3 border border-indigo-300 rounded-lg bg-white bg-opacity-10 text-white focus:outline-none focus:border-gray-400 focus:bg-opacity-30">
+          <input type="text" name="fullname" placeholder="Full Name" required class="w-full p-3 border border-indigo-300 rounded-lg bg-white bg-opacity-10 text-white focus:outline-none focus:border-gray-400 focus:bg-opacity-30">
         </div>
 
         <div>
           <p class="text-indigo-100 font-medium mb-2">User Name:</p>
-          <input type="text" name="username" placeholder="User Name" value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>" required class="w-full p-3 border border-indigo-300 rounded-lg bg-white bg-opacity-10 text-white focus:outline-none focus:border-gray-400 focus:bg-opacity-30">
+          <input type="text" name="username" placeholder="User Name" required class="w-full p-3 border border-indigo-300 rounded-lg bg-white bg-opacity-10 text-white focus:outline-none focus:border-gray-400 focus:bg-opacity-30">
         </div>
 
         <div>
           <p class="text-indigo-100 font-medium mb-2">Date of Birth:</p>
-          <input type="date" name="dob" value="<?php echo htmlspecialchars($_POST['dob'] ?? ''); ?>" required class="w-full p-3 border border-indigo-300 rounded-lg bg-white bg-opacity-10 text-white focus:outline-none focus:border-gray-400 focus:bg-opacity-30">
+          <input type="date" name="dob" required class="w-full p-3 border border-indigo-300 rounded-lg bg-white bg-opacity-10 text-white focus:outline-none focus:border-gray-400 focus:bg-opacity-30">
         </div>
 
         <div>
           <p class="text-indigo-100 font-medium mb-2">Email:</p>
-          <input type="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required class="w-full p-3 border border-indigo-300 rounded-lg bg-white bg-opacity-10 text-white focus:outline-none focus:border-gray-400 focus:bg-opacity-30">
+          <input type="email" name="email" placeholder="Email" required class="w-full p-3 border border-indigo-300 rounded-lg bg-white bg-opacity-10 text-white focus:outline-none focus:border-gray-400 focus:bg-opacity-30">
         </div>
 
-        <div>
+        <div id="password-field">
           <p class="text-indigo-100 font-medium mb-2">Password:</p>
           <input type="password" name="password" placeholder="Password" required minlength="6" class="w-full p-3 border border-indigo-300 rounded-lg bg-white bg-opacity-10 text-white focus:outline-none focus:border-gray-400 focus:bg-opacity-30">
         </div>
 
-        <button type="submit" class="w-full p-3 bg-gray-500 text-white rounded-lg font-bold hover:bg-gray-600 transition">Register</button>
+        <button type="submit" class="w-full p-3 bg-gray-500 text-white rounded-lg font-bold hover:bg-gray-600 transition">Save</button>
       </form>
     </div>
   </div>
 
   <script>
     function showTab(tab) {
-      document.getElementById('list-tab').classList.remove('block');
       document.getElementById('list-tab').classList.add('hidden');
-      document.getElementById('register-tab').classList.remove('block');
       document.getElementById('register-tab').classList.add('hidden');
-
       document.getElementById(tab + '-tab').classList.remove('hidden');
-      document.getElementById(tab + '-tab').classList.add('block');
     }
 
     document.getElementById('register-form').addEventListener('submit', function(e) {
@@ -231,9 +268,15 @@ $conn->close();
           alert(data.popup);
           showTab('register');
         } else if (data.success) {
+          alert(data.message || 'Success!');
+          form.reset();
+          document.getElementById('user_id').value = '';
+          document.getElementById('form_action').value = 'register';
+          document.querySelector('[name="password"]').required = true;
+          showTab('list');
           location.reload();
         } else {
-          if (data.message) alert(data.message);
+          alert(data.message || 'Operation failed.');
         }
       })
       .catch(err => { form.submit(); });
@@ -255,6 +298,18 @@ $conn->close();
         else alert(data.message || 'Delete failed');
       })
       .catch(() => location.reload());
+    }
+
+    function editUser(user) {
+      showTab('register');
+      document.getElementById('user_id').value = user.id;
+      document.getElementById('form_action').value = 'update';
+      document.querySelector('[name="fullname"]').value = user["Full Name"];
+      document.querySelector('[name="username"]').value = user["User name"];
+      document.querySelector('[name="dob"]').value = user["Date of Birth"];
+      document.querySelector('[name="email"]').value = user["Email"];
+      document.querySelector('[name="password"]').required = false;
+      document.getElementById('password-field').style.display = 'none';
     }
   </script>
 </body>
