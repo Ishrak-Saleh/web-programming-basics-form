@@ -1,6 +1,6 @@
-# 📦 PHP Web Application
+# 📦 PHP Registration Form
 
-A lightweight and responsive PHP-based web application built with clean, modular PHP and a simple user interface.  
+A lightweight and responsive PHP-based registration form built with clean, modular PHP and a simple user interface.  
 This project demonstrates core concepts of web development using **PHP**, **HTML**, **CSS**, and **MySQL**, running on **XAMPP**.
 
 ---
@@ -70,4 +70,4 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
 
 **Your Name**  
 📧 [ischy2003@gmail.com](mailto:ischy2003@gmail.com)  
-🔗 [GitHub Profile](https://github.com/<ishrak-saleh>)
+🔗 [GitHub Profile](https://github.com/ishrak-saleh)
