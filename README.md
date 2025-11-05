@@ -13,17 +13,17 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
 ---
 
 <h2>Screenshots</h2>
-<h3>Registration Tab</h3>
+<h3 align="center">Registration Tab</h3>
 <p align="center">
   <img src="screenshots/Registration Tab.png" width="600" alt="Registration Tab Screenshot">
 </p>
 
-<h3>User List Tab</h3>
+<h3 align="center">User List Tab</h3>
 <p align="center">
   <img src="screenshots/User List Tab.png" width="600" alt="User List Tab Screenshot">
 </p>
 
-<h3>Edit Tab</h3>
+<h3 align="center">Edit Tab</h3>
 <p align="center">
   <img src="screenshots/Edit Tab.png" width="600" alt="Edit Tab Screenshot">
 </p>
