@@ -27,7 +27,6 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
 <p align="center">
   <img src="screenshots/Edit Tab.png" width="600" alt="Edit Tab Screenshot">
 </p>
----
 
 ## Project Structure
 - index.php # Main entry point (redirects to view.php)
