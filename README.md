@@ -1,9 +1,9 @@
-# 📦 PHP Registration Form
-A lightweight and responsive PHP-based **User Management System** built with a clean, modular structure.  
+## PHP Registration Form
+A lightweight and responsive PHP-based Registration Form built with a clean, modular structure.  
 This project demonstrates core concepts of web development using **PHP**, **HTML**, **CSS**, and **MySQL**, running on **XAMPP**.
 ---
 
-## 🚀 Features
+## Features
 - Register, view, edit, and delete users seamlessly  
 - MySQL database integration with prepared statements  
 - Modular architecture for better code organization  
@@ -12,7 +12,7 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
 - Secure password hashing using `password_hash()`  
 ---
 
-## 🧩 Project Structure
+## Project Structure
 ├── index.php # Main entry point (redirects to view.php)
 ├── view.php # Handles UI rendering and form logic
 ├── db.php # Database connection file
@@ -22,7 +22,7 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
 └── README.md # Project documentation
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 1. **Place this project inside your XAMPP/htdocs/ directory.**  
    Example: C:\xampp\htdocs\Web-Programming
 
@@ -48,7 +48,7 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
    http://localhost/Web-Programming/
 ---
 
-## 🧠 Usage
+## Usage
 - **index.php** → Redirects to `view.php` (keeps entrypoint clean)  
 - **view.php** → Handles all backend logic and page rendering  
 - **db.php** → Manages database connection (included in view.php)  
@@ -57,7 +57,7 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
 - **bg.jpg** → Optional background image for the UI  
 ---
 
-## 📚 Technologies Used
+## Technologies Used
 - **Frontend:** HTML5, Tailwind CSS, JavaScript  
 - **Backend:** PHP (running via XAMPP Apache Server)  
 - **Database:** MySQL  
@@ -65,7 +65,7 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
 - **Version Control:** Git + GitHub  
 ---
 
-## 🧑‍💻 Author
+## Author
 **Ishrak Saleh**  
 📧 [ischy2003@gmail.com](mailto:ischy2003@gmail.com)  
 🔗 [GitHub Profile](https://github.com/ishrak-saleh)
