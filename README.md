@@ -13,13 +13,13 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
 ---
 
 ## Project Structure
-├── index.php # Main entry point (redirects to view.php)
-├── view.php # Handles UI rendering and form logic
-├── db.php # Database connection file
-├── script.js # JavaScript for AJAX and tab handling
-├── style.css # Styling for layout and design
-├── bg.jpg # Background image for the UI
-└── README.md # Project documentation
+- index.php # Main entry point (redirects to view.php)
+- view.php # Handles UI rendering and form logic
+- db.php # Database connection file
+- script.js # JavaScript for AJAX and tab handling
+- style.css # Styling for layout and design
+- bg.jpg # Background image for the UI
+- README.md # Project documentation
 ---
 
 ## Installation & Setup
