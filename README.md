@@ -12,6 +12,23 @@ This project demonstrates core concepts of web development using **PHP**, **HTML
 - Secure password hashing using `password_hash()`  
 ---
 
+<h2>Screenshots</h2>
+<h3>Registration Tab</h3>
+<p align="center">
+  <img src="screenshots/Registration Tab.png" width="600" alt="Registration Tab Screenshot">
+</p>
+
+<h3>User List Tab</h3>
+<p align="center">
+  <img src="screenshots/User List Tab.png" width="600" alt="User List Tab Screenshot">
+</p>
+
+<h3>Edit Tab</h3>
+<p align="center">
+  <img src="screenshots/Edit Tab.png" width="600" alt="Edit Tab Screenshot">
+</p>
+---
+
 ## Project Structure
 - index.php # Main entry point (redirects to view.php)
 - view.php # Handles UI rendering and form logic
